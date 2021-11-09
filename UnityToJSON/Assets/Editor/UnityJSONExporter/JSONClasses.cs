@@ -108,9 +108,18 @@ public class JSONTimeOfDay : JSONComponent
     public float timeOff;
 }
 
-public class JSONCamera : JSONComponent
-{
+    public enum ProjectionType
+    {
+        Perspective,
+        Orthogonal
+    }
 
+    public class JSONCamera : JSONComponent
+{
+    public ProjectionType projection;
+        public float fovVertical;
+        public float near;
+        public float far;
 }
 
 public class JSONLight : JSONComponent

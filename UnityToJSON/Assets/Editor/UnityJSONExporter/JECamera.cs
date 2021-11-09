@@ -19,8 +19,13 @@ public class JECamera : JEComponent
 
     public override JSONComponent ToJSON()
     {
+        var cam = unityComponent as Camera;
         var json = new JSONCamera();
         json.type = "Camera";
+        json.projection = cam.orthographic ? ProjectionType.Orthogonal : ProjectionType.Perspective;
+        json.fovVertical = cam.fieldOfView;
+        json.near = cam.nearClipPlane;
+        json.far = cam.farClipPlane;
         return json;
     }
 
