@@ -1,0 +1,19 @@
+{
+  "displayName": "Unity To JSON",
+  "name": "com.wschnepp.unity-to-json",
+  "version": "1.0.0",
+  "unity": "2020.3",
+  "description": "Unity exporter to export current scene to JSON file as a package. Forked from https://github.com/RobertoMalatesta/UnityToJSON",
+  "keywords": [
+    "json",
+    "export"
+  ],
+  "repository": {
+    "url": "https://github.com/wschnepp/UnityToJSON.git",
+    "type": "git",
+    "revision": "93a614b5e0df3983931e5428b36151256f41e433"
+  },
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "2.0.0"
+  }
+}
