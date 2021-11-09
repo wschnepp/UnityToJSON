@@ -36,10 +36,10 @@ public class JELightmap : JEResource
 
         for (int i = 0; i < lightmaps.Length; i++)
         {
-            var lightmap = lightmaps[i].lightmapNear;
+            var lightmap = lightmaps[i].lightmapDir;
 
             if (lightmap == null)
-                lightmap = lightmaps[i].lightmapFar;
+                lightmap = lightmaps[i].lightmapColor;
 
             string path = AssetDatabase.GetAssetPath(lightmap);
             TextureImporter textureImporter = AssetImporter.GetAtPath(path) as TextureImporter;

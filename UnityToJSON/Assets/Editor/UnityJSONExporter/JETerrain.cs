@@ -25,8 +25,8 @@ public class JETerrain : JEComponent
 
     override public void Process()
     {
-        heightmapHeight = terrainData.heightmapHeight;
-        heightmapWidth = terrainData.heightmapWidth;
+        heightmapHeight = terrainData.heightmapResolution;
+        heightmapWidth = terrainData.heightmapResolution;
         heightmapResolution = terrainData.heightmapResolution;
         heightmapScale = terrainData.heightmapScale;
         size = terrainData.size;
