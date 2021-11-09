@@ -10,8 +10,7 @@
   ],
   "repository": {
     "url": "https://github.com/wschnepp/UnityToJSON.git",
-    "type": "git",
-    "revision": "93a614b5e0df3983931e5428b36151256f41e433"
+    "type": "git"
   },
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "2.0.0"
