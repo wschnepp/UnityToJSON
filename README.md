@@ -20,6 +20,14 @@
  * Terrain
  * Cameras
 
+### Import as Package
+
+This fork updates the old codebase (https://github.com/RobertoMalatesta/UnityToJSON) to be a Unity package that can be imported using the Unity package manager.
+
+The most recent version of the package can be quickly imported using `PackageManager->Add package from git url...` using 
+
+https://github.com/wschnepp/UnityToJSON.git?path=/UnityToJSON/Packages/UnityToJSON
+
 ### Example Uses
 
 **JSON** is a standard and highly useful format for processing tasks.
