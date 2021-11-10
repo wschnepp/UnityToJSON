@@ -118,6 +118,7 @@ public class JSONTimeOfDay : JSONComponent
 {
     public ProjectionType projection;
         public float fovVertical;
+        public float aspectRatio;
         public float near;
         public float far;
 }

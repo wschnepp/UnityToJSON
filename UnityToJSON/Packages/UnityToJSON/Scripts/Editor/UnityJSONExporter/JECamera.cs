@@ -26,6 +26,7 @@ public class JECamera : JEComponent
         json.fovVertical = cam.fieldOfView;
         json.near = cam.nearClipPlane;
         json.far = cam.farClipPlane;
+        json.aspectRatio = cam.aspect;
         return json;
     }
 
