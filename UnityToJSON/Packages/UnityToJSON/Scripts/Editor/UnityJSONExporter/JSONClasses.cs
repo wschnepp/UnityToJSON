@@ -110,8 +110,8 @@ public class JSONTimeOfDay : JSONComponent
 
     public enum ProjectionType
     {
-        Perspective,
-        Orthogonal
+        Orthogonal,
+        Perspective
     }
 
     public class JSONCamera : JSONComponent
