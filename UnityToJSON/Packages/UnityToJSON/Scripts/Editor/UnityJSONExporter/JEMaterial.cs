@@ -113,7 +113,7 @@ public class JEMaterial : JEResource
                 json.shaderKeywords[i] = unityMaterial.shaderKeywords[i];
         }
 
-        //json.color = unityMaterial.color;
+        json.color = unityMaterial.color;
 
         return json;
     }
