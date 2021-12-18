@@ -30,7 +30,7 @@ public class JEGameObject : JEObject
         components.Add(component);
     }
 
-    public JEGameObject(GameObject go, JEGameObject parent)
+    public JEGameObject(GameObject go, JEGameObject parent, bool includeDisabledComponents, bool includeUnknownComponents)
     {
 
         GameObjectLookup[go] = this;
@@ -42,7 +42,7 @@ public class JEGameObject : JEObject
         if (parent != null)
             parent.children.Add(this);
 
-        JEComponent.QueryComponents(this);
+        JEComponent.QueryComponents(this, includeDisabledComponents, includeUnknownComponents);
     }
 
     // first pass is preprocess
@@ -95,6 +95,7 @@ public class JEGameObject : JEObject
         JSONGameObject json = new JSONGameObject();
 
         json.name = name;
+        json.active = unityGameObject.activeSelf;
 
         json.children = new List<JSONGameObject>();
         foreach (var child in children)

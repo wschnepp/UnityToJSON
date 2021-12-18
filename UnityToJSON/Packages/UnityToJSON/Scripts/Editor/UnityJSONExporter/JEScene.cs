@@ -15,7 +15,7 @@ public class JEScene : JEObject
 
     public static string sceneName;
 
-    public static JEScene TraverseScene()
+    public static JEScene TraverseScene(bool disabledGOs, bool disabledComponents, bool includeUnknown)
     {
         var scene = new JEScene();
 
@@ -40,7 +40,9 @@ public class JEScene : JEObject
         // traverse the "root" game objects, collecting child game objects and components
         foreach (var go in root)
         {
-            scene.rootGameObjects.Add(Traverse(go));
+            var rgo = Traverse(go, disabledGOs, disabledComponents, includeUnknown);
+            if(rgo != null)
+                scene.rootGameObjects.Add(rgo);
         }
 
         return scene;
@@ -82,13 +84,15 @@ public class JEScene : JEObject
 
     List<JEGameObject> rootGameObjects = new List<JEGameObject>();
 
-    static JEGameObject Traverse(GameObject obj, JEGameObject jparent = null)
+    static JEGameObject Traverse(GameObject obj, bool disabledGOs, bool disabledComponents, bool includeUnknown, JEGameObject jparent = null)
     {
-        JEGameObject jgo = new JEGameObject(obj, jparent);
+        if (!disabledGOs && !obj.activeSelf)
+            return null;
+        JEGameObject jgo = new JEGameObject(obj, jparent, disabledComponents, includeUnknown);
 
         foreach (Transform child in obj.transform)
         {
-            Traverse(child.gameObject, jgo);
+            Traverse(child.gameObject, disabledGOs, disabledComponents, includeUnknown, jgo);
         }
 
         return jgo;

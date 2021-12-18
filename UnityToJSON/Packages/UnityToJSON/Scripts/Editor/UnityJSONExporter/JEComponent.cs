@@ -46,21 +46,29 @@ public class JEComponent : JEObject
         conversions = new Dictionary<Type, Type >();
     }
 
-    public static void QueryComponents(JEGameObject jgo)
+    public static void QueryComponents(JEGameObject jgo, bool includeDisabled, bool includeUnregistered)
     {
-        // for every registered conversion get that component
-        foreach( KeyValuePair<Type,Type> pair in conversions)
+        var allComponents = jgo.unityGameObject.GetComponents<Component>();
+        foreach(var component in allComponents)
         {
-            Component[] components = jgo.unityGameObject.GetComponents(pair.Key);
-
-            foreach (Component component in components)
+            if (component == null )
+                continue;
+            if (!includeDisabled)
             {
-
-                MeshRenderer meshRenderer = component as MeshRenderer;
-                if (meshRenderer != null && !meshRenderer.enabled)
+                if(component is Behaviour behaviour && !behaviour.enabled)
                     continue;
-
-                var jcomponent = Activator.CreateInstance(pair.Value) as JEComponent;
+                }
+                
+            Type dstType = typeof(JEGeneralComponent);
+            Type knownType = null;
+            bool isKnownType = (conversions != null && conversions.TryGetValue(component.GetType(), out knownType));
+            if(isKnownType)
+            {
+                dstType = knownType;
+            }
+            if (includeUnregistered || isKnownType)
+            {
+                var jcomponent = Activator.CreateInstance(dstType) as JEComponent;
 
                 if (jcomponent == null)
                 {
@@ -70,7 +78,6 @@ public class JEComponent : JEObject
                 jcomponent.unityComponent = component;
                 jcomponent.jeGameObject = jgo;
                 jgo.AddComponent(jcomponent);
-
             }
         }
     }

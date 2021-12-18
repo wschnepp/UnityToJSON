@@ -74,6 +74,7 @@ public class JSONLightmap
 public class JSONGameObject
 {
     public string name;
+    public bool active;
     public List<JSONComponent> components;
     public List<JSONGameObject> children;
 
