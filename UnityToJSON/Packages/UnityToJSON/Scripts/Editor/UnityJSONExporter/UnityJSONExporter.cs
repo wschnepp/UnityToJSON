@@ -16,6 +16,8 @@ namespace JSONExporter
 
     public class UnityJSONExporter : ScriptableObject
     {
+        public delegate void RegisterCallback();
+
         static void reset()
         {
             JEResource.Reset();
@@ -26,11 +28,11 @@ namespace JSONExporter
             JEComponent.RegisterStandardComponents();
         }
 
-        public static JSONScene GenerateJSONScene(bool disabledGOs, bool disabledComponents, bool includeUnknown)
+        public static JSONScene GenerateJSONScene(bool disabledGOs, bool disabledComponents, bool includeUnknown, RegisterCallback registerCallback)
         {
             // reset the exporter in case there was an error, Unity doesn't cleanly load/unload editor assemblies
             reset();
-
+            registerCallback?.Invoke();
             JEScene.sceneName = Path.GetFileNameWithoutExtension(EditorApplication.currentScene);
 
             JEScene scene = JEScene.TraverseScene(disabledGOs, disabledComponents, includeUnknown);

@@ -3,6 +3,8 @@ using UnityEditor;
 using System.IO;
 using JSONExporter;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using static JSONExporter.UnityJSONExporter;
 
 public class UnityJSONExporterWindow : EditorWindow
 {
@@ -11,18 +13,28 @@ public class UnityJSONExporterWindow : EditorWindow
     bool includeDisabledComponents;
     bool includeUnknownComponentTypes;
 
+    RegisterCallback registerCallback;
+
     // Add menu named "My Window" to the Window menu
     [MenuItem("UnityToJSON/Export")]
-    static void Init()
+    public static void Init()
+    {
+        WithAdditionalRegistrations("JSON Export", null);
+    }
+
+    public static void WithAdditionalRegistrations( string title,
+        RegisterCallback registerCallback)
     {
         // Get existing open window or if none, make a new one:
-        UnityJSONExporterWindow window = (UnityJSONExporterWindow)EditorWindow.GetWindow(typeof(UnityJSONExporterWindow));
-         window.Show();
+        UnityJSONExporterWindow window = (UnityJSONExporterWindow)EditorWindow.GetWindow<UnityJSONExporterWindow>(title);
+        window.registerCallback = registerCallback;
+        window.Show();
     }
 
     private void OnEnable()
     {
     }
+    int successfulMessageTTL = 0;
 
     void OnGUI()
     {
@@ -49,26 +61,38 @@ public class UnityJSONExporterWindow : EditorWindow
             {
                 overwrite = EditorUtility.DisplayDialog("File already exists", "Do you wish to overwrite it?", "Yes", "No");
             }
-            
-  
-            if(!exists || overwrite)
+
+
+            if (!exists || overwrite)
             {
-                DoExport(exportFilePath, includeDisabledGameObjects, includeDisabledComponents, includeUnknownComponentTypes);
+                if(DoExport(exportFilePath, includeDisabledGameObjects, includeDisabledComponents, includeUnknownComponentTypes, registerCallback))
+                {
+                    successfulMessageTTL = 10;
+                }               
+            
             }          
 
         }
 
-        
+        if (successfulMessageTTL > 0)
+        {
+            EditorGUILayout.HelpBox("Text Export successful", MessageType.Info);
+
+            successfulMessageTTL--;
+        }
+
+
     }
 
-    private static void DoExport(string path, bool disabledGOs, bool disabledComponents, bool includeUnknown)
+    private static bool DoExport(string path, bool disabledGOs, bool disabledComponents, bool includeUnknown, RegisterCallback registerCallback)
     {
-        var jsonScene = UnityJSONExporter.GenerateJSONScene(disabledGOs, disabledComponents, includeUnknown);
+        var jsonScene = UnityJSONExporter.GenerateJSONScene(disabledGOs, disabledComponents, includeUnknown, registerCallback);
         JsonConverter[] converters = new JsonConverter[] { new BasicTypeConverter() };
         string json = JsonConvert.SerializeObject(jsonScene, Formatting.Indented, converters);
 
         System.IO.File.WriteAllText(path, json);
-        EditorUtility.DisplayDialog("UnityToJSON", "Export Successful", "OK");
+        return true;
+
     }
 
     private string ChooseExportPath()
