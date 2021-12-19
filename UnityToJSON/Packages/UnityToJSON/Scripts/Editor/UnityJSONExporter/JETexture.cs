@@ -37,7 +37,9 @@ public class JETexture : JEResource
 
         TextureImporter textureImporter = AssetImporter.GetAtPath(path) as TextureImporter;
 
-        if (textureImporter.isReadable == false)
+        if (textureImporter == null)
+            return;
+        if (textureImporter && textureImporter.isReadable == false)
         {
             textureImporter.isReadable = true;
             AssetDatabase.ImportAsset(path);

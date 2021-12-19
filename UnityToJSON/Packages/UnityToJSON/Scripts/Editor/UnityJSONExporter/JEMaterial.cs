@@ -112,8 +112,9 @@ public class JEMaterial : JEResource
             for (int i = 0; i < unityMaterial.shaderKeywords.Length;i++)
                 json.shaderKeywords[i] = unityMaterial.shaderKeywords[i];
         }
-
-        json.color = unityMaterial.color;
+        if(unityMaterial.HasProperty("_Color")) {
+            json.color = unityMaterial.color;
+        }
 
         return json;
     }
