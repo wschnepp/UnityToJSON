@@ -33,7 +33,7 @@ public class JEMesh : JEResource
 
         string path = AssetDatabase.GetAssetPath(mesh);
         path = Path.GetFileNameWithoutExtension(path);
-        name = path + "_" + mesh.name;
+        name = mesh.name;
     }
 
     void preprocess()
