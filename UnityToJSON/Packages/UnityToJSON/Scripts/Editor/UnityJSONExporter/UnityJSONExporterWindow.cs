@@ -9,11 +9,32 @@ using static JSONExporter.UnityJSONExporter;
 public class UnityJSONExporterWindow : EditorWindow
 {
     string exportFilePath = "";
+    string ignoreTag = "";
     bool includeDisabledGameObjects;
     bool includeDisabledComponents;
     bool includeUnknownComponentTypes;
 
     RegisterCallback registerCallback;
+
+    private void OnEnable()
+    {
+        exportFilePath = EditorPrefs.GetString("UnityJSONExportWindow_File");
+        ignoreTag = EditorPrefs.GetString("UnityJSONExportWindow_IgnoreTag");
+        includeDisabledGameObjects = EditorPrefs.GetBool("UnityJSONExportWindow_IncludeDisabledGameObjects");
+        includeDisabledComponents = EditorPrefs.GetBool("UnityJSONExportWindow_IncludeDisabledComponents");
+        includeUnknownComponentTypes = EditorPrefs.GetBool("UnityJSONExportWindow_IncludeUnknownComponents");
+
+    }
+
+    private void OnDisable()
+    {
+        EditorPrefs.SetString("UnityJSONExportWindow_File", exportFilePath);
+        EditorPrefs.SetString("UnityJSONExportWindow_IgnoreTag", ignoreTag);
+        EditorPrefs.SetBool("UnityJSONExportWindow_IncludeDisabledGameObjects", includeDisabledGameObjects);
+        EditorPrefs.SetBool("UnityJSONExportWindow_IncludeDisabledComponents", includeDisabledComponents);
+        EditorPrefs.SetBool("UnityJSONExportWindow_IncludeUnknownComponents", includeUnknownComponentTypes);
+
+    }
 
     // Add menu named "My Window" to the Window menu
     [MenuItem("UnityToJSON/Export")]
@@ -31,9 +52,6 @@ public class UnityJSONExporterWindow : EditorWindow
         window.Show();
     }
 
-    private void OnEnable()
-    {
-    }
     int successfulMessageTTL = 0;
 
     void OnGUI()
@@ -48,6 +66,7 @@ public class UnityJSONExporterWindow : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
 
+        ignoreTag = EditorGUILayout.TextField("Ignore Gameobjects Tagged with", ignoreTag);
         includeDisabledGameObjects = EditorGUILayout.Toggle("Export disabled gameobjects", includeDisabledGameObjects);
         includeDisabledComponents = EditorGUILayout.Toggle("Export disabled components", includeDisabledComponents);
         includeUnknownComponentTypes = EditorGUILayout.Toggle("Export components with unknown type too", includeUnknownComponentTypes);
@@ -65,7 +84,7 @@ public class UnityJSONExporterWindow : EditorWindow
 
             if (!exists || overwrite)
             {
-                if(DoExport(exportFilePath, includeDisabledGameObjects, includeDisabledComponents, includeUnknownComponentTypes, registerCallback))
+                if(DoExport(exportFilePath, ignoreTag, includeDisabledGameObjects, includeDisabledComponents, includeUnknownComponentTypes, registerCallback))
                 {
                     successfulMessageTTL = 10;
                 }               
@@ -84,9 +103,9 @@ public class UnityJSONExporterWindow : EditorWindow
 
     }
 
-    private static bool DoExport(string path, bool disabledGOs, bool disabledComponents, bool includeUnknown, RegisterCallback registerCallback)
+    private static bool DoExport(string path, string ignoreTag, bool disabledGOs, bool disabledComponents, bool includeUnknown, RegisterCallback registerCallback)
     {
-        var jsonScene = UnityJSONExporter.GenerateJSONScene(disabledGOs, disabledComponents, includeUnknown, registerCallback);
+        var jsonScene = UnityJSONExporter.GenerateJSONScene(ignoreTag, disabledGOs, disabledComponents, includeUnknown, registerCallback);
         JsonConverter[] converters = new JsonConverter[] { new BasicTypeConverter() };
         string json = JsonConvert.SerializeObject(jsonScene, Formatting.Indented, converters);
 

@@ -28,14 +28,14 @@ namespace JSONExporter
             JEComponent.RegisterStandardComponents();
         }
 
-        public static JSONScene GenerateJSONScene(bool disabledGOs, bool disabledComponents, bool includeUnknown, RegisterCallback registerCallback)
+        public static JSONScene GenerateJSONScene(string ignoreTag, bool disabledGOs, bool disabledComponents, bool includeUnknown, RegisterCallback registerCallback)
         {
             // reset the exporter in case there was an error, Unity doesn't cleanly load/unload editor assemblies
             reset();
             registerCallback?.Invoke();
             JEScene.sceneName = Path.GetFileNameWithoutExtension(EditorApplication.currentScene);
 
-            JEScene scene = JEScene.TraverseScene(disabledGOs, disabledComponents, includeUnknown);
+            JEScene scene = JEScene.TraverseScene(ignoreTag, disabledGOs, disabledComponents, includeUnknown);
 
             scene.Preprocess();
             scene.Process();

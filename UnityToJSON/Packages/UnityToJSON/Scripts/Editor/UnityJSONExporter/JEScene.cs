@@ -15,7 +15,7 @@ public class JEScene : JEObject
 
     public static string sceneName;
 
-    public static JEScene TraverseScene(bool disabledGOs, bool disabledComponents, bool includeUnknown)
+    public static JEScene TraverseScene(string ignoreTag, bool disabledGOs, bool disabledComponents, bool includeUnknown)
     {
         var scene = new JEScene();
 
@@ -27,7 +27,8 @@ public class JEScene : JEObject
         foreach (object o in objects)
         {
             GameObject go = (GameObject) o;
-
+            if (go.tag == ignoreTag)
+                continue;
             if (go.transform.parent == null)
                 root.Add(go);
         }
@@ -40,7 +41,7 @@ public class JEScene : JEObject
         // traverse the "root" game objects, collecting child game objects and components
         foreach (var go in root)
         {
-            var rgo = Traverse(go, disabledGOs, disabledComponents, includeUnknown);
+            var rgo = Traverse(go, ignoreTag, disabledGOs, disabledComponents, includeUnknown);
             if(rgo != null)
                 scene.rootGameObjects.Add(rgo);
         }
@@ -84,15 +85,15 @@ public class JEScene : JEObject
 
     List<JEGameObject> rootGameObjects = new List<JEGameObject>();
 
-    static JEGameObject Traverse(GameObject obj, bool disabledGOs, bool disabledComponents, bool includeUnknown, JEGameObject jparent = null)
+    static JEGameObject Traverse(GameObject obj, string ignoreTag, bool disabledGOs, bool disabledComponents, bool includeUnknown, JEGameObject jparent = null)
     {
-        if (!disabledGOs && !obj.activeSelf)
+        if ((!disabledGOs && !obj.activeSelf) || obj.tag == ignoreTag)
             return null;
         JEGameObject jgo = new JEGameObject(obj, jparent, disabledComponents, includeUnknown);
 
         foreach (Transform child in obj.transform)
         {
-            Traverse(child.gameObject, disabledGOs, disabledComponents, includeUnknown, jgo);
+            Traverse(child.gameObject, ignoreTag, disabledGOs, disabledComponents, includeUnknown, jgo);
         }
 
         return jgo;

@@ -77,6 +77,7 @@ public class JEMesh : JEResource
 
     public static JEMesh RegisterMesh(Mesh mesh)
     {
+            if (mesh == null) return null;
         if (allMeshes.ContainsKey(mesh))
         {
             return allMeshes[mesh];
