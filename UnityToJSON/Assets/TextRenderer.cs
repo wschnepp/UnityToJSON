@@ -6,14 +6,11 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter))]
 public class TextRenderer : MonoBehaviour
 {
+    [TextArea]
     public string text;
     public int fontIndex;
     public int fontSize;
     public Color textColor;
-
-    public float hres;
-
-    public int vres;
 
     GameObject childPlane = null;
 
@@ -23,6 +20,16 @@ public class TextRenderer : MonoBehaviour
 
         if (childPlane)
         {
+            var lines = text.Split('\n');
+
+            var vres = lines.Length;
+
+            var hres = 0;
+            foreach(var l in lines)
+            {
+                hres = Mathf.Max(hres, l.Length);
+            }
+
             var textAspectRatio = hres / (float)vres;
             const float meshScale = 10; //unity default plane is 10*10 meters by default
             const float onePoint = 0.352f * 10e-3f; // one point == 1/72 inch or 0.35 mm
