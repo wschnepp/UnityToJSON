@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+//thanks https://www.youtube.com/watch?v=pdDrY8Mc2lU
 [InitializeOnLoad]
 public class CustomHierarchyTagDrawer : MonoBehaviour
 {
@@ -20,11 +21,6 @@ public class CustomHierarchyTagDrawer : MonoBehaviour
         };
     }
 
-    private void OnDisable()
-    {
-        EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyItemDraw;
-        guiStyle = null;
-    }
 
     private static void OnHierarchyItemDraw(int instanceId, Rect selection)
     {
