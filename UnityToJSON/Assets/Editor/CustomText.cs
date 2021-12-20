@@ -12,6 +12,7 @@ public class CustomText
     {
         public string mesh;
         public string text;
+        public int fontIndex;
         public int fontSize;
         public Color textColor;
     }
@@ -46,6 +47,7 @@ public class CustomText
             json.mesh = "Plane";
             json.type = "TextRenderer";
             json.text = textRenderer.text;
+            json.fontIndex = textRenderer.fontIndex;
             json.fontSize = textRenderer.fontSize;
             json.textColor = textRenderer.textColor;
             return json;

@@ -6,6 +6,7 @@ using UnityEngine;
 public class TextRenderer : MonoBehaviour
 {
     public string text;
+    public int fontIndex;
     public int fontSize;
     public Color textColor;
 }
